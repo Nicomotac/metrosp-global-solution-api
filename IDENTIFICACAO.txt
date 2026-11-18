@@ -1,2 +1,4 @@
 Global Solution 2026/2 - Metrô SP
-Preencher: nomes e RMs dos integrantes antes da entrega.
+
+NICOLAS MOTA - RM561857
+CAIO KENZO - RM592979
