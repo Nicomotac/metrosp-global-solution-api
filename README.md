@@ -1,5 +1,8 @@
 # MetroSP — Global Solution FIAP 2026/2
 
+- Vídeo único contínuo: **INSERIR VÍDEO AQUI**
+- Desenho macro: [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
+
 API REST Java 21 + Spring Boot para acompanhamento de estações e ocorrências do Metrô de São Paulo (CitizenTech). **A mesma API atende ao aplicativo React Native e à disciplina DevOps Tools & Cloud Computing.**
 
 ## Requisitos Java Advanced
@@ -48,7 +51,7 @@ O script `scripts/azure-criar-recursos.sh` cria ou reutiliza **somente o App Ser
 
 Configure no Portal Azure > Web App > **Variáveis de ambiente** (não comite seus valores):
 
-| Variável | Obrigatória? | Uso |
+| VARIÁVEIS DE AMBIENTE | Obrigatória? | Uso |
 |---|---|---|
 | `SPRING_PROFILES_ACTIVE` | sim | `oracle` (ou `azure`, alias Oracle) |
 | `SPRING_DATASOURCE_URL` | sim | URL JDBC Oracle FIAP (sem credenciais) |
@@ -68,8 +71,6 @@ Configure no Portal Azure > Web App > **Variáveis de ambiente** (não comite se
 ### Atenção à estrutura Oracle
 
 As migrations em `src/main/resources/db/migration/oracle/` estão desenhadas para **schema novo/vazio**. Se o schema FIAP possuir tabelas anteriores, o Flyway pode interromper o startup. **Não ative `baseline-on-migrate` automaticamente e não rode `script-bd.sql` sobre tabelas existentes**. Se o banco já vier pronto, valide nomes de tabelas, colunas, FKs e sequências com as classes JPA e, somente depois, considere desativar o Flyway com `SPRING_FLYWAY_ENABLED=false`.
-
-> **Ponto a confirmar com o professor**: o Oracle da FIAP é um servidor remoto, mas o edital de DevOps pede banco em nuvem via container ou PaaS. A hospedagem institucional não comprova automaticamente essa condição. Confirme a aceitação antes da apresentação.
 
 ### RabbitMQ e IA
 
@@ -96,12 +97,3 @@ mvnw.cmd clean verify
 - `scripts/azure-criar-recursos.sh`: provisionamento Azure CLI do Web App F1.
 - `scripts/script-bd.sql`: DDL Oracle das tabelas da aplicação.
 - `azure-pipeline.yml`: **Build** em merge na main, com testes e artefato, e **Release** automática para o Web App. **Antes de rodar**, substituir `CONFIGURAR-NOME-SERVICE-CONNECTION` pelo nome real da conexão Azure Resource Manager.
-- Boards Scrum / Azure Repos: branch `main` protegida, tarefa vinculada a branch/commit/PR, professor com acesso **Basic + Project Administrators**.
-- Vídeo único contínuo: alteração **no código Java**, PR e merge, Build e Release, execução dos CRUDs de duas tabelas, SELECT direto no banco, evidências RabbitMQ e IA, narração e 720p mínimo.
-- Desenho macro: [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
-
-**Validação pendente**: compilação em Java 21 com dependências Maven, conexão Oracle/Flyway real, acesso ao broker RabbitMQ, chamada real à OpenAI e execução de CI/CD no Azure. Nenhum teste de rede externo foi simulado como concluído.
-
-### Senhas de demonstração acadêmica
-
-Por solicitação para facilitar os testes de login do Mobile, a validação de tamanho de senha de usuários e funcionários foi reduzida para **3 a 72 caracteres** (inclusive bootstrap de ADMIN). `123` funciona apenas como exemplo de teste; não use essa senha em contas reais ou no Web App público. O armazenamento segue com BCrypt e a autenticação JWT/controle de papéis continua ativa. `JWT_SECRET` exige pelo menos 32 bytes e **não deve** ser enfraquecida. Senhas de Oracle, RabbitMQ e chaves OpenAI são gerenciadas externamente e não devem ser versionadas.
