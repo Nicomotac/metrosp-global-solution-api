@@ -1,0 +1,14 @@
+/target/
+/.settings/
+/.classpath
+/.project
+/.idea/
+*.iml
+/data/
+*.mv.db
+*.lock.db
+*.trace.db
+.env
+.env.*
+!.env.example
+*.log

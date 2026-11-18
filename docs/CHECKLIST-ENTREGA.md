@@ -1,0 +1,21 @@
+# Checklist FIAP — Java Advanced + Cloud
+
+- [ ] Maven `clean verify`: Build SUCCESS, testes JUnit da API e do login passando.
+- [ ] 4 entidades JPA (`Estacao`, `Funcionario`, `Ocorrencia`, `Usuario`), com 3 relacionadas (ocorrência / estação / funcionário).
+- [ ] Swagger, paginação e CRUD de estações e ocorrências demonstrados.
+- [ ] Cadastro USER / login USER e ADMIN reais; JWT; permissão 403 para USER em CRUD administrativo.
+- [ ] Bean Validation e `@RestControllerAdvice` demonstrados com requisição inválida.
+- [ ] Banco Oracle FIAP com tabelas compatíveis; decidir Flyway com segurança; conexão Azure testada.
+- [ ] Confirmar aceitação do Oracle FIAP como banco na nuvem, exigência de DevOps.
+- [ ] `JWT_SECRET`, Oracle, RabbitMQ e OpenAI somente em variáveis de ambiente, com credenciais rotacionadas.
+- [ ] RabbitMQ na nuvem; POST ocorrência publica evento e consumidor recebe (mostrar logs/fila).
+- [ ] Spring AI contextual: chamada real em `/api/ocorrencias/{id}/orientacao` com conta OpenAI com créditos.
+- [ ] Aplicativo Mobile usa API para login e CRUD, sem dados apenas no dispositivo.
+- [ ] Azure Repos privado + Boards Scrum; tarefa, branch, commit e PR vinculados.
+- [ ] Main protegida por revisor, Work Item e revisor padrão (RM).
+- [ ] Professor no Azure DevOps: acesso **Basic** + **Project Administrators**, sem Stakeholder.
+- [ ] Azure CLI script real (`scripts/azure-criar-recursos.sh`) no Repos; Web App F1 acessível.
+- [ ] `scripts/script-bd.sql` com DDL Oracle em `/scripts`.
+- [ ] `azure-pipeline.yml` na raiz; Service Connection real; CI publica JAR e testes; Release automática.
+- [ ] Vídeo narrado, 720p mínimo, contínuo e sem cortes: código Java → PR → CI → Release → Web App → CRUD direto no banco (SELECT).
+- [ ] PDF: folha de rosto, nome/RM, link da organização Azure DevOps e do vídeo no YouTube.

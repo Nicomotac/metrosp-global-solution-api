@@ -1,0 +1,69 @@
+# Global Solution FIAP - Build automatica apos merge em main, deploy automatico apos artefato.
+# Antes de salvar/rodar: criar Service Connection no Azure DevOps e ajustar azureServiceConnection.
+trigger:
+  branches:
+    include:
+    - main
+pr: none
+variables:
+  vmImage: 'ubuntu-latest'
+  azureServiceConnection: 'CONFIGURAR-NOME-SERVICE-CONNECTION'
+  webAppName: 'app-global-mobile-rm561859'
+stages:
+- stage: Build
+  displayName: 'Compilacao e testes Java'
+  jobs:
+  - job: Maven
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - task: JavaToolInstaller@0
+      inputs:
+        versionSpec: '21'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
+    - script: mvn -B clean verify
+      displayName: 'Compilar e executar testes automaticos'
+    - task: PublishTestResults@2
+      displayName: 'Publicar resultados JUnit'
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/target/surefire-reports/TEST-*.xml'
+        failTaskOnFailedTests: true
+    - task: CopyFiles@2
+      displayName: 'Preparar pacote JAR'
+      inputs:
+        Contents: |
+          target/metrosp-api-*.jar
+          !target/*original.jar
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        flattenFolders: true
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publicar artefato JAR'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'jar'
+- stage: Release
+  displayName: 'Publicar no Web App'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    environment: 'gs-metrosp'
+    pool:
+      vmImage: $(vmImage)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: jar
+          - task: AzureWebApp@1
+            displayName: 'Deploy Java no App Service F1'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              appType: webAppLinux
+              appName: $(webAppName)
+              package: '$(Pipeline.Workspace)/jar/metrosp-api-*.jar'
+              runtimeStack: 'JAVA|21-java21'

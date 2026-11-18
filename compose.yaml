@@ -1,0 +1,14 @@
+# Apenas RabbitMQ r API executam no Eclipse.
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: metrosp
+      RABBITMQ_DEFAULT_PASS: metrosp-local-dev
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+volumes:
+  rabbitmq_data:
